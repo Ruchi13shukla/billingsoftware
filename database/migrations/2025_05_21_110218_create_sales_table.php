@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_number')->unique()->after('id');
+             $table->string('invoice_number')->unique();
             $table->string('customer_name');
             $table->string('phone');
             $table->string('address')->nullable();
             $table->string('gstin')->nullable();
             $table->enum('gst_type', ['GST', 'Non-GST'])->default('Non-GST');
-            $table->decimal('total', 10, 2);
+            $table->decimal('gst_percentage', 5, 2)->nullable();
+            $table->decimal('total', 10, 2); 
             $table->timestamps();
         });
     }
@@ -29,8 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sales', function (Blueprint $table) {
-        $table->dropColumn('invoice_number');
-    });
+        Schema::dropIfExists('sales');
     }
 };

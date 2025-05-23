@@ -42,12 +42,15 @@ Route::get('/all-products', [ProductController::class, 'index'])->name('product.
 Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
 Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
 Route::get('/product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+Route::patch('/product/{id}/update-quantity', [ProductController::class, 'updateQuantity'])->name('product.updateQuantity');
+
 
 
 //sale
 Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
 Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
 Route::get('/sales/{id}', [SaleController::class, 'show'])->name('sales.show');
+Route::post('/sales/store', [SaleController::class, 'store'])->name('sales.store');
 
 
 // Auth::routes();

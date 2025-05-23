@@ -10,11 +10,17 @@ class Sale extends Model
      use HasFactory;
 
     protected $fillable = [
-        'invoice_number', 'customer_name', 'customer_phone', 'customer_address',
-        'customer_gstin', 'total_amount', 'is_gst'
-    ];
+    'invoice_number',
+    'customer_name',
+    'phone',         
+    'address',
+    'gstin',
+    'gst_type', 
+    'gst_percentage',    
+    'total',         
+];
 
-     // A sale has many sale items
+     
     public function saleItems()
     {
         return $this->hasMany(SaleItem::class);

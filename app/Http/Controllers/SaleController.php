@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
@@ -16,69 +17,102 @@ class SaleController extends Controller
         return view('backend.product.sale.create', compact('products'));
 
     }
+public function store(Request $request)
+{
+    
+    // dd($request->all());
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|string|max:20',
-            'customer_address' => 'required|string|max:255',
-            'customer_gstin' => 'nullable|string|max:15',
-            'products.*.product_id' => 'required|exists:products,id',
-            'products.*.quantity' => 'required|integer|min:1',
-        ]);
+    $validated = $request->validate([
+        'customer_name' => 'required|string|max:255',
+        'customer_phone' => 'required|string|max:20',
+        'customer_address' => 'nullable|string',
+        'customer_gstin' => 'nullable|string|max:20',
+        'gst_percentage' => 'nullable|numeric',
+        'total_amount' => 'required|numeric',
+        'products' => 'required|array',
+        'products.*.product_id' => 'required|exists:products,id',
+        'products.*.price' => 'required|numeric',
+        'products.*.quantity' => 'required|integer|min:1',
+    ]);
 
-        DB::beginTransaction();
-        try {
-            // Generate unique invoice number
-            $invoiceNumber = 'INV-' . str_pad((Sale::max('id') ?? 0) + 1, 6, '0', STR_PAD_LEFT);
-
-            // Create sale
-            $sale = Sale::create([
-                'invoice_number' => $invoiceNumber,
-                'customer_name' => $request->customer_name,
-                'customer_phone' => $request->customer_phone,
-                'customer_address' => $request->customer_address,
-                'customer_gstin' => $request->customer_gstin,
-            ]);
-
-            $totalAmount = 0;
-
-            foreach ($request->products as $item) {
-                $product = Product::findOrFail($item['product_id']);
-                $quantity = $item['quantity'];
-                $subtotal = $product->price * $quantity;
-
-                SaleItem::create([
-                    'sale_id' => $sale->id,
-                    'product_id' => $product->id,
-                    'quantity' => $quantity,
-                    'price' => $product->price,
-                    'subtotal' => $subtotal,
-                ]);
-
-                $totalAmount += $subtotal;
-
-                // Optional: reduce stock
-                $product->decrement('quantity', $quantity);
-            }
-
-            $sale->update(['total_amount' => $totalAmount]);
-
-            DB::commit();
-
-            return redirect()->route('sales.show', $sale->id)->with('success', 'Sale created successfully.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Error: ' . $e->getMessage());
+    
+    foreach ($validated['products'] as $product) {
+        $productModel = Product::find($product['product_id']);
+        if (!$productModel || $productModel->quantity < $product['quantity']) {
+            return redirect()->back()->with('error', 'Not enough stock for ' . ($productModel->name ?? 'unknown product'));
         }
     }
+
+    DB::transaction(function () use ($validated) {
+    
+        $sale = Sale::create([
+            'invoice_number' => 'INV' . time() . rand(10, 99),
+            'customer_name' => $validated['customer_name'],
+            'phone' => $validated['customer_phone'],
+            'address' => $validated['customer_address'],
+            'gstin' => $validated['customer_gstin'],
+            'gst_percentage' => $validated['gst_percentage'] ?? 0,
+            'gst_type' => ($validated['gst_percentage'] ?? 0) > 0 ? 'GST' : 'Non-GST',
+            'total' => $validated['total_amount'],
+        ]);
+
+    
+foreach ($validated['products'] as $product) {
+    $price = $product['price'];
+    $quantity = $product['quantity'];
+    $baseSubtotal = $price * $quantity;
+
+    $productModel = Product::find($product['product_id']);
+
+
+    $gstPercentage = $productModel->gst_percentage ?: ($validated['gst_percentage'] ?? 0);
+$gstAmount = 0;
+$finalSubtotal = $baseSubtotal;
+
+if ($productModel->gst_status === 'Excluded') {
+    $gstAmount = ($baseSubtotal * $gstPercentage) / 100;
+    $finalSubtotal = $baseSubtotal + $gstAmount;
+} elseif ($productModel->gst_status === 'Included') {
+    $gstAmount = ($baseSubtotal * $gstPercentage) / (100 + $gstPercentage);
+    $finalSubtotal = $baseSubtotal;
+} else {
+    $gstPercentage = 0;
+    $gstAmount = 0;
+    $finalSubtotal = $baseSubtotal;
+}
+
+    dd([
+    'product' => $productModel->name,
+    'gst_status' => $productModel->gst_status,
+    'gst_percentage' => $gstPercentage,
+    'baseSubtotal' => $baseSubtotal,
+    'gstAmount' => $gstAmount,
+    'finalSubtotal' => $finalSubtotal,
+]);
+
+
+    SaleItem::create([
+        'sale_id' => $sale->id,
+        'product_id' => $product['product_id'],
+        'price' => $price,
+        'quantity' => $quantity,
+        'gst_percentage' => $gstPercentage,
+        'subtotal' => $finalSubtotal,
+    ]);
+
+
+    $productModel->quantity -= $quantity;
+    $productModel->save();
+}
+    });
+
+    return redirect()->back()->with('success', 'Sale recorded successfully!');
+}
 
     public function show($id)
     {
         $sale = Sale::with('saleItems.product')->findOrFail($id);
         return view('product.sales.show', compact('sale'));
     }
-}
 
+}

@@ -39,21 +39,21 @@ class ProductController extends Controller
     }
 
 
-    // List all products
+    
     public function index()
     {
         $products = Product::all();
         return view('backend.product.index', compact('products'));
     }
 
-     // Edit form
+     
     public function edit($id)
     {
         $product = Product::findOrFail($id);
         return view('backend.product.edit', compact('product'));
     }
 
-    // Update product
+    
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -76,7 +76,22 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Product updated successfully.');
     }
 
-    // Delete product
+
+    public function updateQuantity(Request $request, $id)
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:0',
+    ]);
+
+    $product = Product::findOrFail($id);
+    $product->quantity = $request->quantity;
+    $product->save();
+
+    return redirect()->back()->with('success', 'Product quantity updated.');
+}
+
+
+    
     public function destroy($id)
     {
         $product = Product::findOrFail($id);

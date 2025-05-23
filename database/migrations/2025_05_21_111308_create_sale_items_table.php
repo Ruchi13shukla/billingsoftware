@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('sale_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
+             $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->unsignedInteger('quantity');
-            $table->decimal('price', 10, 2);     // Unit price at the time of sale
-            $table->decimal('subtotal', 10, 2);  // price * quantity
+            $table->decimal('price', 10, 2);     
+            $table->decimal('gst_percentage', 5, 2)->nullable(); 
+            $table->decimal('subtotal', 10, 2); 
             $table->timestamps();
         });
     }
@@ -30,5 +31,3 @@ return new class extends Migration
         Schema::dropIfExists('sale_items');
     }
 };
-
-

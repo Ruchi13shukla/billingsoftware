@@ -15,6 +15,7 @@ class Product extends Model
         'price',
         'quantity',
         'gst_status',
+        'gst_percentage', 
     ];
 
     public function saleItems()

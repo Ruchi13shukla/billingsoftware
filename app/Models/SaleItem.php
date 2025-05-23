@@ -14,16 +14,17 @@ class SaleItem extends Model
         'product_id',
         'quantity',
         'price',
+        'gst_percentage',
         'subtotal',
+       
     ];
 
-    // Each sale item belongs to a sale
     public function sale()
     {
         return $this->belongsTo(Sale::class);
     }
 
-    // Each sale item belongs to a product
+    
     public function product()
     {
         return $this->belongsTo(Product::class);

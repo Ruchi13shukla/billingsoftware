@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sales', function (Blueprint $table) {
-            //
+        Schema::table('products', function (Blueprint $table) {
+            $table->decimal('gst_percentage', 5, 2)->nullable()->after('gst_status');
         });
     }
 
@@ -21,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sales', function (Blueprint $table) {
-            //
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('gst_percentage');
+
         });
     }
 };

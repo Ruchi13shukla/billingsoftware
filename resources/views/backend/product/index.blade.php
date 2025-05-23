@@ -1,4 +1,5 @@
 @extends('backend.layouts.app')
+
 @section('content')
 <div class="content-wrapper">
 <section class="content">
@@ -18,24 +19,32 @@
                 <th>Category</th>
                 <th>Price</th>
                 <th>Quantity</th>
+                <th>Stock</th>
                 <th>GST</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody> 
-          @foreach($products as $product)
-  <tr>
-      <td>{{ $loop->iteration }}</td> <!-- Serial number -->
-      <td>{{ $product->name }}</td>
-      <td>{{ $product->category }}</td>
-      <td>{{ $product->price }}</td>
-      <td>{{ $product->quantity }}</td>
-      <td>{{ $product->gst_status }}</td>
-      <td>
-          <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary">Edit</a>
-          <a href="{{ route('product.delete', $product->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-      </td>
-  </tr>
+              @foreach($products as $product)
+              <tr>
+                  <td>{{ $loop->iteration }}</td>
+                  <td>{{ $product->name }}</td>
+                  <td>{{ $product->category }}</td>
+                  <td>₹{{ number_format($product->price, 2) }}</td>
+                  <td>{{ $product->quantity }}</td>
+                  <td>
+                      @if($product->quantity > 0)
+                          <span class="badge bg-success">In Stock</span>
+                      @else
+                          <span class="badge bg-danger">Out of Stock</span>
+                      @endif
+                  </td>
+                  <td>{{ $product->gst_status }}</td>
+                  <td>
+                      <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                      <a href="{{ route('product.delete', $product->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                  </td>
+              </tr>
               @endforeach
             </tbody>
             <tfoot>
@@ -45,6 +54,7 @@
                 <th>Category</th>
                 <th>Price</th>
                 <th>Quantity</th>
+                <th>Stock</th>
                 <th>GST</th>
                 <th>Action</th>
               </tr>

@@ -14,7 +14,7 @@
                     </div> 
            {{-- ---start card body--- --}}
                     <div class="card-body"> 
-                        {{-- <form role="form" action="{{ URL::to('/insert-product') }}" method="post"> --}}
+              
                             <form role="form" action="{{ route('insert-product') }}" method="post">
 
                             @csrf
