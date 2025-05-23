@@ -81,16 +81,6 @@ if ($productModel->gst_status === 'Excluded') {
     $finalSubtotal = $baseSubtotal;
 }
 
-    dd([
-    'product' => $productModel->name,
-    'gst_status' => $productModel->gst_status,
-    'gst_percentage' => $gstPercentage,
-    'baseSubtotal' => $baseSubtotal,
-    'gstAmount' => $gstAmount,
-    'finalSubtotal' => $finalSubtotal,
-]);
-
-
     SaleItem::create([
         'sale_id' => $sale->id,
         'product_id' => $product['product_id'],
