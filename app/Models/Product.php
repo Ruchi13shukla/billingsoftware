@@ -13,10 +13,17 @@ class Product extends Model
         'name',
         'category',
         'price',
+        'cost_price',
         'quantity',
         'gst_status',
         'gst_percentage', 
     ];
+
+    
+    protected $casts = [
+        'gst_percentage' => 'float',
+];
+
 
     public function saleItems()
 {

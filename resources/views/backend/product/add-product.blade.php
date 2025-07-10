@@ -40,6 +40,13 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                              <label for="cost_price" class="col-sm-6 col-form-label">Cost Price</label>
+                               <div class="col-sm-10"> 
+                                  <input type="number" name="cost_price" class="form-control" step="0.01" required>
+                            </div>
+
+
                             <div class="form-group row">
                                 <label for="quantity" class="col-sm-6 col-form-label">Quantity</label>
                                 <div class="col-sm-10">

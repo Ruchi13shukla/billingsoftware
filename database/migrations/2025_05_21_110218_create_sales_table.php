@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
              $table->string('invoice_number')->unique();
             $table->string('customer_name');
-            $table->string('phone');
+            $table->string('phone', 10);
             $table->string('address')->nullable();
             $table->string('gstin')->nullable();
             $table->enum('gst_type', ['GST', 'Non-GST'])->default('Non-GST');
             $table->decimal('gst_percentage', 5, 2)->nullable();
+            $table->decimal('total_cgst_amount', 10, 2)->default(0)->after('gst_percentage');
+            $table->decimal('total_sgst_amount', 10, 2)->default(0)->after('total_cgst_amount');
             $table->decimal('total', 10, 2); 
             $table->timestamps();
         });

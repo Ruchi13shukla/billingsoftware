@@ -13,7 +13,7 @@
     <form method="POST" action="{{ route('sales.store') }}">
         @csrf
 
-      
+        <!-- Customer Info -->
         <div class="card mb-3">
             <div class="card-header">Customer Information</div>
             <div class="card-body row">
@@ -23,20 +23,31 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label>Phone</label>
-                    <input type="text" name="customer_phone" class="form-control" required>
+                    <input type="text" name="phone" class="form-control" pattern="\d{10,12}" maxlength="12" minlength="10" title="Enter a valid mobile number (10 to 12 digits)" required>
                 </div>
                 <div class="form-group col-md-3">
                     <label>Address</label>
-                    <input type="text" name="customer_address" class="form-control" required>
+                    <input type="text" name="address" class="form-control" required>
                 </div>
+                
                 <div class="form-group col-md-3">
-                    <label>GSTIN (optional)</label>
-                    <input type="text" name="customer_gstin" class="form-control">
-                </div>
+    <label>GSTIN (optional)</label>
+    <input type="text" name="gstin" class="form-control">
+</div>
+
+<div class="form-group col-md-3">
+    <label for="gst_type">GST Type</label>
+    <select name="gst_type" id="gst_type" class="form-control" required>
+        <option value="">-- Select GST Type --</option>
+        <option value="GST" {{ old('gst_type') == 'GST' ? 'selected' : '' }}>GST</option>
+        <option value="Non-GST" {{ old('gst_type') == 'Non-GST' ? 'selected' : '' }}>Non-GST</option>
+    </select>
+</div>
+
             </div>
         </div>
 
-       
+        <!-- Products -->
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between">
                 <span>Products</span>
@@ -80,7 +91,7 @@
             </div>
         </div>
 
-        
+        <!-- GST Section -->
         <div class="card mb-3">
             <div class="card-body row align-items-center">
                 <div class="col-md-3">
@@ -101,12 +112,17 @@
                     </select>
                 </div>
 
-                <div class="col-md-3">
-                    <label>Total (Before GST)</label>
-                    <input type="text" id="subtotal" class="form-control" readonly>
+                <div class="col-md-2 gst-fields">
+                    <label>CGST (₹)</label>
+                    <input type="text" id="cgst_amount" class="form-control" readonly>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2 gst-fields">
+                    <label>SGST (₹)</label>
+                    <input type="text" id="sgst_amount" class="form-control" readonly>
+                </div>
+
+                <div class="col-md-2">
                     <label>Total Payable</label>
                     <input type="text" id="total" class="form-control" readonly>
                     <input type="hidden" name="total_amount" id="total_amount">
@@ -133,22 +149,45 @@
             const qty = parseInt(row.querySelector('.quantity')?.value || 1);
             subtotal += price * qty;
         });
+       
+        document.querySelector('input[name="phone"]').addEventListener('input', function (e) {
+              this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+       });
 
         const gstEnabled = document.getElementById('gst_toggle').checked;
+        const gstRate = parseFloat(document.getElementById('gst_percentage')?.value || 0);
         let total = subtotal;
+        let cgst = 0;
+        let sgst = 0;
 
-        if (gstEnabled) {
-            const gstRate = parseFloat(document.getElementById('gst_percentage')?.value || 0);
+        if (gstEnabled && gstRate > 0) {
             const gstAmount = subtotal * gstRate / 100;
+            cgst = gstAmount / 2;
+            sgst = gstAmount / 2;
             total = subtotal + gstAmount;
+
             document.getElementById('gst_section').style.display = 'block';
+            document.querySelectorAll('.gst-fields').forEach(el => el.style.display = 'block');
         } else {
             document.getElementById('gst_section').style.display = 'none';
+            document.querySelectorAll('.gst-fields').forEach(el => el.style.display = 'none');
         }
 
-        document.getElementById('subtotal').value = subtotal.toFixed(2);
+        document.getElementById('cgst_amount').value = cgst.toFixed(2);
+        document.getElementById('sgst_amount').value = sgst.toFixed(2);
         document.getElementById('total').value = total.toFixed(2);
         document.getElementById('total_amount').value = total.toFixed(2);
+    }
+
+    function validateDuplicateProducts() {
+        const selects = document.querySelectorAll('.product-select');
+        const selectedValues = Array.from(selects).map(s => s.value).filter(v => v);
+        const duplicates = selectedValues.filter((v, i, a) => a.indexOf(v) !== i);
+        if (duplicates.length > 0) {
+            alert("Duplicate products are not allowed.");
+            return false;
+        }
+        return true;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -161,6 +200,7 @@
             newRow.querySelectorAll('select, input').forEach((el) => {
                 if (el.name) el.name = el.name.replace(/\[\d+\]/, `[${rowIndex}]`);
                 if (el.classList.contains('price_display') || el.tagName === 'INPUT') el.value = '';
+                if (el.classList.contains('quantity')) el.value = 1;
                 if (el.tagName === 'SELECT') el.selectedIndex = 0;
             });
 
@@ -185,12 +225,21 @@
                 updateTotals();
             }
 
-            if (e.target.classList.contains('quantity') || e.target.id === 'gst_percentage' || e.target.id === 'gst_toggle') {
+            if (
+                e.target.classList.contains('quantity') ||
+                e.target.id === 'gst_percentage' ||
+                e.target.id === 'gst_toggle'
+            ) {
                 updateTotals();
             }
         });
 
-        
+        document.querySelector('form').addEventListener('submit', function (e) {
+            if (!validateDuplicateProducts()) {
+                e.preventDefault();
+            }
+        });
+
         updateTotals();
     });
 </script>

@@ -18,6 +18,7 @@
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
+                <th>Cost Price</th>
                 <th>Quantity</th>
                 <th>Stock</th>
                 <th>GST</th>
@@ -31,6 +32,7 @@
                   <td>{{ $product->name }}</td>
                   <td>{{ $product->category }}</td>
                   <td>₹{{ number_format($product->price, 2) }}</td>
+                  <td>₹{{ number_format($product->cost_price, 2) }}</td>
                   <td>{{ $product->quantity }}</td>
                   <td>
                       @if($product->quantity > 0)
@@ -53,6 +55,7 @@
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
+                <th>Cost Price</th>
                 <th>Quantity</th>
                 <th>Stock</th>
                 <th>GST</th>

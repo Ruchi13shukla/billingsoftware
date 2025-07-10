@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');                    
             $table->string('category');                
-            $table->decimal('price', 10, 2);            
+            $table->decimal('price', 10, 2);  
+            $table->decimal('cost_price', 10, 2);          // ✅ Cost Price added          
             $table->unsignedInteger('quantity');        
             $table->enum('gst_status', ['Included', 'Excluded'])->default('Excluded');
             $table->decimal('gst_percentage', 5, 2)->nullable();

@@ -10,6 +10,7 @@
     <div class="card-body">
       <form action="{{ route('product.update', $product->id) }}" method="POST">
         @csrf
+            @method('PUT')
         <div class="form-group">
           <label>Name</label>
           <input type="text" name="name" value="{{ $product->name }}" class="form-control" required>
@@ -24,6 +25,11 @@
           <label>Price</label>
           <input type="number" name="price" value="{{ $product->price }}" class="form-control" required>
         </div>
+       
+        <div class="form-group">
+          <label>Cost Price</label>
+          <input type="number" name="cost_price" value="{{ $product->cost_price }}" class="form-control" required>
+        </div>
 
         <div class="form-group">
           <label>Quantity</label>
@@ -31,13 +37,20 @@
         </div>
 
         <div class="form-group">
-          <label>GST Status</label>
-          <select name="gst_status" class="form-control" required>
-    <option value="Included" {{ $product->gst_status == 'Included' ? 'selected' : '' }}>Included</option>
-    <option value="Excluded" {{ $product->gst_status == 'Excluded' ? 'selected' : '' }}>Excluded</option>
-</select>
-        </div>
+    <label for="gst_status">GST Status</label>
+    <select name="gst_status" id="gst_status" class="form-control" onchange="toggleGstPercentage()">
+        <option value="Included" {{ $product->gst_status === 'Included' ? 'selected' : '' }}>Included</option>
+        <option value="Excluded" {{ $product->gst_status === 'Excluded' ? 'selected' : '' }}>Excluded</option>
+        <option value="Non-GST" {{ $product->gst_status === 'Non-GST' ? 'selected' : '' }}>Non-GST</option>
+    </select>
+</div>
 
+
+
+    <div class="form-group">
+              <label>GST Percentage</label>
+              <input type="number" name="gst_percentage" step="0.01" value="{{ $product->gst_percentage }}" class="form-control">
+            </div>                                           
         <button type="submit" class="btn btn-success">Update Product</button>
       </form>
     </div>
@@ -46,3 +59,20 @@
 </section>
 </div>
 @endsection
+
+<script>
+  function toggleGstPercentage() {
+    const gstStatus = document.getElementById('gst_status').value;
+    const gstPercentageInput = document.querySelector('input[name="gst_percentage"]').parentElement;
+    
+    if (gstStatus === 'Non-GST') {
+      gstPercentageInput.style.display = 'none';
+    } else {
+      gstPercentageInput.style.display = 'block';
+    }
+  }
+
+
+  document.addEventListener('DOMContentLoaded', toggleGstPercentage);
+</script>
+

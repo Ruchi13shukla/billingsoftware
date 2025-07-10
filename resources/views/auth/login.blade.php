@@ -72,9 +72,9 @@
       </div>
       <!-- /.social-auth-links --> --}}
 
-      <p class="mb-1">
+      {{-- <p class="mb-1">
         <a href="{{route('password.request')}}">I forgot my password</a>
-      </p>
+      </p> --}}
       <p class="mb-0">
         <a href="{{route('register')}}" class="text-center">Register a new membership</a>
       </p>
@@ -93,3 +93,4 @@
 <script src="{{asset('backend/dist/js/adminlte.min.js')}}"></script>
 </body>
 </html>
+

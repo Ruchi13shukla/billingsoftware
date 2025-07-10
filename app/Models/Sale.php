@@ -17,7 +17,10 @@ class Sale extends Model
     'gstin',
     'gst_type', 
     'gst_percentage',    
-    'total',         
+    'total',  
+    'total_cgst_amount', 
+    'total_sgst_amount',
+       
 ];
 
      
@@ -25,4 +28,21 @@ class Sale extends Model
     {
         return $this->hasMany(SaleItem::class);
     }
+
+    public function items()
+{
+    return $this->hasMany(SaleItem::class);
+}
+    
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
 }
