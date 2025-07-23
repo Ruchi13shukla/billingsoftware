@@ -17,12 +17,12 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="{{asset('backend/index2.html')}}" class="h1"><b>Admin</b>LTE</a> 
-      {{-- <a href="../../index2.html" class="h1"><b>Admin</b>LTE</>a --}}
+<div class="card card-outline card-primary" style="margin: auto border-radius: 20px;">
+  <div class="card-header text-center p-0 m-0">
+    <img src="{{ asset('backend/dist/img/logo.png') }}" alt="Admin Logo" style="height: 150px; width:150px; display: block; margin: 0 auto;">
+      {{-- <a href="{{ asset('backend/index2.html') }}" class="h1 m-0" style="font-size: 24px;"><b>Admin</b>LTE</a> --}}
+  </div>
 
-    </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 

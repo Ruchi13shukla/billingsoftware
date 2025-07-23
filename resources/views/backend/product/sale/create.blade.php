@@ -31,9 +31,14 @@
                 </div>
                 
                 <div class="form-group col-md-3">
-    <label>GSTIN (optional)</label>
-    <input type="text" name="gstin" class="form-control">
-</div>
+    <label>GST Number</label>
+<input type="text" name="gstin" class="form-control" value="{{ old('gstin') }}" pattern="[0-9A-Z]{15}" maxlength="15">
+
+@error('gstin')
+    <small class="text-danger">{{ $message }}</small>
+@enderror
+ </div>
+
 
 <div class="form-group col-md-3">
     <label for="gst_type">GST Type</label>

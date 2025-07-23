@@ -131,11 +131,22 @@
 <body>
 
 
-    <div class="invoice-header">
-        <h2>Company Name Pvt. Ltd.</h2>
-        <p><strong>Address:</strong> 123 Main Street, City, State, ZIP Code</p>
-        <p><strong>Phone:</strong> +91-9876543210 | <strong>Email:</strong> contact@company.com</p>
+<div class="invoice-header" style="position: relative; padding: 10px; border: 1px solid #333; background-color: #f7f7f7;">
+
+    <!-- Logo on top-left -->
+    <div style="position: absolute; top: 10px; left: 10px;">
+<img src="{{ asset('backend/dist/img/logo.png') }}" alt="Company Logo" style="width: 70px; height: auto;">
     </div>
+
+    <!-- Centered company info -->
+    <div style="text-align: center;">
+        <h2 style="margin: 0;">Company Name Pvt. Ltd.</h2>
+        <p style="margin: 2px 0;"><strong>Address:</strong> 123 Main Street, City, State, ZIP Code</p>
+        <p style="margin: 2px 0;"><strong>Phone:</strong> +91-9876543210 | <strong>Email:</strong> contact@company.com</p>
+        <p style="margin: 2px 0;"><strong>GST Number:</strong> 82ABCDE1243E1Z7</p>
+
+    </div>
+</div>
 
 
     <div class="invoice-info">
@@ -150,6 +161,8 @@
         <p><strong>Phone:</strong> {{ $sale->phone }}</p>
         <p><strong>Address:</strong> {{ $sale->address }}</p>
         <p><strong>GST Type:</strong> {{ $sale->gst_type }}</p>
+        <p><strong>GST Number:</strong> {{ $sale->gstin }}</p>
+
     </div>
 
     

@@ -38,6 +38,7 @@ public function invoice($id)
 
 public function store(Request $request)
 {
+
     DB::beginTransaction();
 
     try {
@@ -138,7 +139,6 @@ public function store(Request $request)
                 'stock_out'      => $quantity,
                 'closing_stock'  => $closingStock,
             ]);
-        
 
             $totalCgst += $cgstAmount;
             $totalSgst += $sgstAmount;
@@ -165,7 +165,9 @@ public function store(Request $request)
         ]);
 
 
+
         $caEmail = 'techpriya25@gmail.com';
+     
         Mail::to($caEmail)->send(new SendInvoice($sale, $pdfPath));
 
         DB::commit();

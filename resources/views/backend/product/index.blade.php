@@ -17,12 +17,12 @@
                 <th>Serial</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Price</th>
-                <th>Cost Price</th>
+                <th>Selling Price</th>
+                <th>Purchase Price</th>
                 <th>Quantity</th>
                 <th>Stock</th>
                 <th>GST</th>
-                <th>Action</th>
+                <th class="no-export">Action</th>
               </tr>
             </thead>
             <tbody> 
@@ -42,7 +42,7 @@
                       @endif
                   </td>
                   <td>{{ $product->gst_status }}</td>
-                  <td>
+                  <td class="no-export">
                       <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary">Edit</a>
                       <a href="{{ route('product.delete', $product->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
                   </td>
@@ -54,12 +54,12 @@
                 <th>Serial</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Price</th>
-                <th>Cost Price</th>
+                <th>Selling Price</th>
+                <th>Purchase Price</th>
                 <th>Quantity</th>
                 <th>Stock</th>
                 <th>GST</th>
-                <th>Action</th>
+                <th class="no-export">Action</th>
               </tr>
             </tfoot>
           </table>

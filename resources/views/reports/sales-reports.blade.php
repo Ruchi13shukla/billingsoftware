@@ -1,6 +1,7 @@
-@extends('backend.layouts.app') {{-- or your layout --}}
+@extends('backend.layouts.app')
 
 @section('content')
+
     <h1>Monthly Sales Report</h1>
 
     <table border="1" cellpadding="10">
@@ -23,4 +24,5 @@
             @endforeach
         </tbody>
     </table>
+    
 @endsection

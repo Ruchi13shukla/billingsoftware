@@ -60,7 +60,6 @@ Route::patch('/product/{id}/update-quantity', [ProductController::class, 'update
 Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
 Route::get('/sales/{id}', [SaleController::class, 'show'])->name('sales.show');
 Route::post('/sales/store', [SaleController::class, 'store'])->name('sales.store');
-// Route::get('/sale/invoice/{id}', [SaleController::class, 'invoice'])->name('sale.invoice');
 
 Route::get('/sale/invoice/{id}', [SaleController::class, 'showInvoice'])->name('sale.invoice');
 
@@ -74,8 +73,6 @@ Route::get('/generate-invoice/{saleId}', [InvoiceController::class, 'generateAnd
 
 Route::get('/sales-reports', [ReportController::class, 'index'])->name('reports.index');
 Route::get('/sales-reports', [ReportController::class, 'monthlySalesReport'])->name('sales.reports');
-// Route::get('/product-sales-reports', [SalesReportController::class, 'productWise'])->name('sales.productWise');
-// Route::get('/sales-reports', [SalesReportController::class, 'index'])->name('sales-reports');
 Route::get('/product-wise-sales', [SalesReportController::class, 'productWiseReport'])->name('sales.productWise');
 
 Route::get('/monthly-sales-report', [SaleController::class, 'monthlyProductSales'])->name('sales.monthly_report');
@@ -94,27 +91,6 @@ Route::get('/reports/profit', [ReportController::class, 'profitReport'])->name('
 
 
 Route::get('/dashboard/stats', [DashboardController::class, 'index'])->name('dashboard.stats');
-
-
-// Route::get('/test-invoice', [InvoiceController::class, 'generateInvoice']);
-
-// Route::get('/send-test-invoice', function () {
-//     $sale = Sale::latest()->first();
-//     $filePath = 'invoices/invoice_1749906680.pdf'; // change if needed
-
-//     try {
-//         Mail::to('shuklaruchi39@gmail.com') // change to your test email
-//             ->send(new SendInvoice($sale, $filePath));
-//         return 'Test mail sent!';
-//     } catch (\Exception $e) {
-//         return 'Mail failed: ' . $e->getMessage();
-//     }
-// });
-
-
-
-
-
 
 
 

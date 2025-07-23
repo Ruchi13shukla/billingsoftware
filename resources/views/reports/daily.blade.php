@@ -17,7 +17,7 @@
     <table border="1" cellpadding="10" width="100%" style="margin-bottom: 10px;">
         <thead style="background-color: #f8f9fa;">
             <tr>
-                <th>Sale Date</th>
+                <th>Date</th>
                 <th>Customer Name</th>
                 <th>Phone</th>
                 <th>Address</th>

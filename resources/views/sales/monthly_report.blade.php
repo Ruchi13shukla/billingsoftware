@@ -7,15 +7,6 @@
     <form method="GET" action="{{ route('sales.monthly_report') }}" class="mb-4">
         <div class="row">
             <div class="col-md-3">
-                <label>Customer</label>
-                <select name="customer_id" class="form-control">
-                    <option value="">-- Select Customer --</option>
-                    @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-3">
                 <label>Product</label>
                 <select name="product_id" class="form-control">
                     <option value="">All</option>
@@ -47,7 +38,6 @@
                     <th>Product</th>
                     <th>Total Quantity Sold</th>
                     <th>Total Amount (₹)</th>
-                    {{-- <th>Customers</th> --}}
                 </tr>
             </thead>
             <tbody>

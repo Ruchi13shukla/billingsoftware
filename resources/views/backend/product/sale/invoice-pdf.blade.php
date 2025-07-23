@@ -82,11 +82,16 @@
 </head>
 <body>
 
-    <div class="invoice-header">
-        <h2>Company Name Pvt. Ltd.</h2>
+  <div class="invoice-header" style="position: relative;">
+    <img src="{{ public_path('backend/dist/img/logo.png') }}" alt="Company Logo" style="position: absolute; top: 10px; left: 10px; height: 60px;">
+
+    <div style="text-align: center;">
+        <h2 style="margin: 0;">Company Name Pvt. Ltd.</h2>
         <p><strong>Address:</strong> 123 Main Street, City, State, ZIP Code</p>
         <p><strong>Phone:</strong> +91-9876543210 | <strong>Email:</strong> contact@company.com</p>
+        <p style="margin: 2px 0;"><strong>GST Number:</strong> 82ABCDE1243E1Z7</p>
     </div>
+</div>
 
     <div class="invoice-info">
         <h3>Invoice #{{ $sale->invoice_number }}</h3>
@@ -99,6 +104,8 @@
         <p><strong>Phone:</strong> {{ $sale->phone }}</p>
         <p><strong>Address:</strong> {{ $sale->address }}</p>
         <p><strong>GST Type:</strong> {{ $sale->gst_type }}</p>
+        <p><strong>GST Number:</strong> {{ $sale->gstin }}</p>
+
     </div>
 
     <div class="section">
